@@ -1,5 +1,5 @@
 # About
-This application allows you to to few _important_ windows with a hotkey instead of Alt+Tab'ing through tons of openend windows. _Important_ windows can be specified by patterns in the config file.
+This application allows you to switch to few _important_ windows with a hotkey instead of Alt+Tab'ing through tons of openend windows. _Important_ windows can be specified by patterns in the config file.
 
 # Config
 
