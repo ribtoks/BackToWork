@@ -1,0 +1,11 @@
+.vs/
+build-*
+*.pro.user
+*.VC.db
+*.VC.opendb
+*.vcxproj.filters
+*.vcxproj.user
+Debug/
+Release/
+
+
