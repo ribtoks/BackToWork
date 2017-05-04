@@ -1,0 +1,21 @@
+# version format
+version: 0.1.{build}-{branch}
+
+skip_tags: false
+
+skip_commits:
+  message: /.*\[ci skip\]/       # Regex for matching commit message
+
+# clone directory
+clone_folder: c:\projects\BackToWork
+
+clone_depth: 3                      # clone entire repository history if not defined
+
+build_script:
+  - cmd: 'cd src\BackToWork'
+  - msbuild BackToWork.sln /verbosity:normal
+
+after_build:
+  - cmd: 'echo %cd%'
+  - 7z a BackToWork-latest.zip Debug\BackToWork.exe
+  - appveyor PushArtifact BackToWork-latest.zip
