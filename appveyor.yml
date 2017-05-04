@@ -13,9 +13,9 @@ clone_depth: 3                      # clone entire repository history if not def
 
 build_script:
   - cmd: 'cd src\BackToWork'
-  - msbuild BackToWork.sln /verbosity:normal
+  - msbuild BackToWork.sln /verbosity:normal /p:Platform="x86"
 
 after_build:
   - cmd: 'echo %cd%'
-  - 7z a BackToWork-latest.zip Debug\BackToWork.exe
+  - 7z a BackToWork-latest.zip x86\Debug\BackToWork.exe btw.config
   - appveyor PushArtifact BackToWork-latest.zip
