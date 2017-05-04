@@ -17,5 +17,5 @@ build_script:
 
 after_build:
   - cmd: 'echo %cd%'
-  - 7z a BackToWork-latest.zip x86\Debug\BackToWork.exe btw.config
+  - 7z a BackToWork-latest.zip Debug\BackToWork.exe btw.config
   - appveyor PushArtifact BackToWork-latest.zip
