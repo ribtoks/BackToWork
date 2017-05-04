@@ -76,15 +76,16 @@ std::map<std::string, int> stringToKey = {
     {"w",  KEY_W },
     {"x",  KEY_X },
     {"y",  KEY_Y },
-    {"z",  KEY_Z }
+    {"z",  KEY_Z },
+
+    {"left", KEY_LEFT},
+    {"right", KEY_RIGHT}
 };
 
 std::map<std::string, int> stringToModifier = {
     {"shift", KEY_SHIFT},
     {"ctrl", KEY_CONTROL},
-    {"alt", KEY_ALT},
-    {"left", KEY_LEFT},
-    {"right", KEY_RIGHT}
+    {"alt", KEY_ALT}
 };
 
 template<typename Out>
