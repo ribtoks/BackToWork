@@ -16,7 +16,7 @@ clone_depth: 3                      # clone entire repository history if not def
 
 build_script:
   - cmd: 'cd src\BackToWork'
-  - msbuild BackToWork.sln /verbosity:normal /p:Platform="x86"
+  - msbuild BackToWork.sln /verbosity:normal /p:Platform="x86" /p:Configuration=Debug
 
 after_build:
   - cmd: 'echo %cd%'
