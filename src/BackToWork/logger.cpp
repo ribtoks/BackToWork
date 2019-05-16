@@ -1,19 +1,18 @@
 #include "logger.h"
 
 #include <iostream>
-#include <algorithm>
+#include <iomanip>
 #include <ctime>
 
 std::mutex Logger::m_Mutex;
 
 Logger::~Logger() {
     std::lock_guard<std::mutex> guard(m_Mutex);
-    
-    std::time_t now = std::time(NULL);
-    std::string timeStr(std::ctime(&now));
-    timeStr.erase(std::remove(timeStr.begin(), timeStr.end(), '\n'), timeStr.end());
-    std::cout << timeStr << " - ";
-        
+
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    std::cout << std::put_time(&tm, "%H-%M-%S") << " - ";
+
     for (auto &s: m_LogLines) {
         std::cout << s << ' ';
     }
