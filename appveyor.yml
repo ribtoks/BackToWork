@@ -1,6 +1,9 @@
 # version format
 version: 0.1.{build}-{branch}
 
+image:
+  - Visual Studio 2017
+
 skip_tags: false
 
 skip_commits:

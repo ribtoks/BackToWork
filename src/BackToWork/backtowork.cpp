@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <codecvt>
+#include <cstring>
 #include <locale>
 #include <string>
 #include <vector>
@@ -13,15 +14,51 @@
 #include "appconfig.h"
 #include "logger.h"
 
+#define WAIT_TIME 200
+
 bool isPriorityAppActive(const AppConfig &config) {
     UNUSED(config);
     return false;
 }
 
-void activateWindow(HWND hwnd) {
-    BringWindowToTop(hwnd);
+bool activateWindow(HWND hwnd, int timeout) {
+	WINDOWPLACEMENT place;
+	memset(&place, 0, sizeof(WINDOWPLACEMENT));
+	place.length = sizeof(WINDOWPLACEMENT);
+	GetWindowPlacement(hwnd, &place);
+
+	switch (place.showCmd)
+	{
+	case SW_SHOWMAXIMIZED:
+		LOG << "Window was maximized";
+		ShowWindow(hwnd, SW_SHOWMAXIMIZED);
+		break;
+	case SW_SHOWMINIMIZED:
+		LOG << "Window was minimized";
+		SendMessage(hwnd, WM_SYSCOMMAND, SC_RESTORE, 0);
+		ShowWindow(hwnd, SW_RESTORE);
+		break;
+	default:
+		LOG << "Window was in default state";
+		ShowWindow(hwnd, SW_SHOW);
+		break;
+	}
+
+    BOOL result = SetForegroundWindow(hwnd);
+	if (!result) { return false; }
+	BringWindowToTop(hwnd);
     SetActiveWindow(hwnd);
-    SetForegroundWindow(hwnd);
+
+	HWND currentActive;
+	int waited = 0;
+	do {
+		Sleep(WAIT_TIME);
+		waited += WAIT_TIME;
+		currentActive = GetForegroundWindow();
+	} while ((hwnd != currentActive) && (waited <= timeout));
+	
+	bool succeeded = GetForegroundWindow() == hwnd;
+	return succeeded;
 }
 
 struct BackToWorkData {
@@ -42,7 +79,7 @@ bool tryEngageMonitor(std::vector<HMONITOR> &engagedMonitors, HMONITOR hmon) {
 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
     if (IsWindow(hwnd) == 0) { return TRUE; }
-    if (IsWindowVisible(hwnd) == 0) { return TRUE; }
+	if (IsWindowVisible(hwnd) == 0) { return TRUE; }
 
     int len = GetWindowTextLength(hwnd) + 1;
     std::vector<wchar_t> titleBuffer(len);
@@ -95,8 +132,8 @@ void activateWindow(const AppConfig &config, BackToWorkData &data, const std::fu
                 HWND hwnd = matches.second;
                 if (isWindowOk(hwnd)) {
                     LOG << "Activating window" << windowTitle;
-                    activateWindow(hwnd);
-                    return;
+					if (activateWindow(hwnd, config.getActivateTimeout() * 1000)) { return; }
+					else { LOG << "ERROR:" << "failed to activate" << windowTitle; }
                 }
             }
         }

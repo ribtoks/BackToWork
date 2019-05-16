@@ -20,6 +20,7 @@ public:
     int getWindowsToActivate() const { return m_WindowsToActivate; }
     int getHotKey() const { return m_HotKey; }
     int getHotKeyModifier() const { return m_HotKeyModifier; }
+	int getActivateTimeout() const { return m_ActivateTimeout; }
 
 private:
     void processConfigKeyValue(std::string &key, std::string &value);
@@ -30,6 +31,7 @@ private:
     int m_WindowsToActivate;
     int m_HotKeyModifier;
     int m_HotKey;
+	int m_ActivateTimeout;
 };
 
 #endif // APPCONFIG_H

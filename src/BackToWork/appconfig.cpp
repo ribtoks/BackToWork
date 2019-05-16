@@ -12,6 +12,7 @@
 #define APP_KEY "app"
 #define MIN_WINDOWS_KEY "min_windows"
 #define HOTKEY_KEY "hotkey"
+#define ACTIVATE_TIMEOUT_KEY "activate_timeout"
 
 const char* ws = " \t\n\r\f\v";
 
@@ -37,6 +38,7 @@ AppConfig::AppConfig(const std::string& pathToConfig):
     LOG << "Using config" << pathToConfig;
     m_HotKeyModifier = KEY_SHIFT | KEY_CONTROL;
     m_HotKey = KEY_0;
+	m_ActivateTimeout = 1;
 }
 
 std::map<std::string, int> stringToKey = {
@@ -195,7 +197,10 @@ void AppConfig::processConfigKeyValue(std::string &key, std::string &value) {
     } else if (key == MIN_WINDOWS_KEY) {
         m_WindowsToActivate = std::stoi(value);
         LOG << value << "minimum windows to activate";
-    } else if (key == HOTKEY_KEY) {
+	} else if (key == ACTIVATE_TIMEOUT_KEY) {
+		m_ActivateTimeout = std::stoi(value);
+		LOG << value << "activation timeout";
+	} else if (key == HOTKEY_KEY) {
         tolower(value);
         if (parseHotKey(value, m_HotKeyModifier, m_HotKey)) {
             LOG << "Found" << value << "as a hotkey";
